@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='index.css')}}" />
+    <title>RPS</title>
+</head>
+<body>
+    <div>
+        <div class="game-announcements">
+            <div class="game-heading">
+                <img class="cat-image" 
+                    src="https://res.cloudinary.com/app-academy4/image/upload/v1647291502/Patchstagram/patch_hd_riobbp.png" />
+                <h1 class="title-text" >
+                    Rock Paper Scissors,  
+                    <span class="subtitle-text">
+                        Cat Style!
+                    </span>
+                </h1>
+                <img class="cat-image image-reverse" 
+                    src="https://res.cloudinary.com/app-academy4/image/upload/v1647291502/Patchstagram/patch_hd_riobbp.png" />
+            </div>
+        </div>
+        <div class="player-container">
+            <div class="player" id="player1">
+                <h1>Cat Player</h1>
+                <div>
+                    <img id="player-image" src="{{game_state.player_image}}"/>   
+                </div>
+            </div>
+            <div class="player" id="player2">
+                <h1>Cat Computer</h1>
+                <div>
+                    <img id="computer-image" src="{{game_state.computer_image}}" />
+                </div>
+            </div>
+        </div>
+        <div class="game-controls">
+            <h3>Pick your move: </h3>
+            <form action="/makemove" method="POST">
+                {{ form.csrf_token }}
+                <p>{{ form.moves }} ● {{ form.submit}}</p>
+
+            </form>
+            <div class="game-stats">
+                <div class="game-stats-data">
+                    <span>Wins</span>
+                    <span id="wins">{{ game_state.wins }}</span>
+                </div>
+                <div class="game-stats-data">
+                    <span>Ties</span>
+                    <span id="ties">{{ game_state.ties }}</span>
+                </div>
+                <div class="game-stats-data">
+                    <span>Losses</span>
+                    <span id="losses">{{ game_state.losses }}</span>
+                </div>
+                <a href="/clear" class="reset-stats">Reset Stats</a>
+            </div>
+            {% with messages = get_flashed_messages() %} 
+                {% if messages %}
+                    <div class=flashes>
+                {% for message in messages %}
+                    <p>{{ message }}</p>
+                {% endfor %}
+                    </div>
+                {% endif %} 
+            {% endwith %}
+        </div>
+    </div>
+</body>
