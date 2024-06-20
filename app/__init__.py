@@ -9,7 +9,12 @@ app = Flask(__name__)
 app.config.from_object(Config)
 
 
-@app.route("/rps", methods=["GET", "POST"])
+@app.route("/")
+def index():
+    return redirect("/rps")
+
+
+@app.route("/rps")
 def rps_game():
     
     form = RPSForm()
@@ -28,13 +33,13 @@ def rps_game():
 def submit_play():
 
     form = RPSForm()
-    print("got here")
-
+   
     if form.validate_on_submit():
         user_move = form.data["moves"]
         computer_move = choice(["rock", "paper", "scissors"])
         results = outcomes[(user_move, computer_move)]
         print("RESULTS", results)
+
         if "wins" in session:
             session['wins'] += results['wins']
         else:
@@ -47,8 +52,10 @@ def submit_play():
             session['losses'] += results['losses']
         else:
             session['losses'] = results['losses']
+            
         session['player_image'] = results["player_image"]
         session['computer_image'] = results["computer_image"]
+
         flash(results['message'])
         return redirect("/rps")
 
@@ -56,7 +63,7 @@ def submit_play():
         print(form.errors)
         print('How did you make errors in RPS?')
 
-    return render_template("rps.html", form=form)
+    return redirect("/rps")
 
 
 
